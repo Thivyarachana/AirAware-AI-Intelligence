@@ -201,7 +201,7 @@ st.markdown("""
 # LOAD DATA
 # ============================================================
 
-DATA_PATH = Path("data") / "air_quality.csv"
+DATA_PATH = "data/air_quality.csv"
 
 @st.cache_data
 def load_data():
