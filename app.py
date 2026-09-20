@@ -1,12 +1,12 @@
-
 import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 
+
 # ============================================================
-# AIR AWARE — URBAN AIR INTELLIGENCE PLATFORM
+# PAGE CONFIGURATION
 # ============================================================
 
 st.set_page_config(
@@ -16,8 +16,9 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+
 # ============================================================
-# CUSTOM LIGHT-GREEN UI
+# CUSTOM CSS
 # ============================================================
 
 st.markdown("""
@@ -27,8 +28,6 @@ st.markdown("""
        AIR AWARE — LIGHT GREEN + WHITE CARD UI
        ALL TEXT BLACK
        ===================================================== */
-
-    /* ---------- GLOBAL APP ---------- */
 
     .stApp {
         background: #EAF7EE !important;
@@ -40,7 +39,6 @@ st.markdown("""
         color: #000000 !important;
     }
 
-    /* Force normal text to black */
     .stApp,
     .stApp p,
     .stApp span,
@@ -56,17 +54,9 @@ st.markdown("""
     [data-testid="stMarkdownContainer"] p,
     [data-testid="stMarkdownContainer"] span,
     [data-testid="stText"],
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
+    h1, h2, h3, h4, h5, h6 {
         color: #000000 !important;
     }
-
-
-    /* ---------- MAIN CONTENT ---------- */
 
     .block-container {
         padding-top: 2rem;
@@ -74,8 +64,7 @@ st.markdown("""
         max-width: 1450px;
     }
 
-
-    /* ---------- HERO SECTION ---------- */
+    /* ---------- HERO ---------- */
 
     .hero {
         background: #FFFFFF !important;
@@ -100,7 +89,6 @@ st.markdown("""
         margin-bottom: 0;
     }
 
-
     /* ---------- SECTION TITLES ---------- */
 
     .section-title {
@@ -117,8 +105,7 @@ st.markdown("""
         margin-bottom: 18px;
     }
 
-
-    /* ---------- WHITE ANALYSIS CARDS ---------- */
+    /* ---------- WHITE CARDS ---------- */
 
     .card {
         background: #FFFFFF !important;
@@ -142,7 +129,6 @@ st.markdown("""
         color: #000000 !important;
     }
 
-
     /* ---------- SIDEBAR ---------- */
 
     section[data-testid="stSidebar"] {
@@ -163,7 +149,6 @@ st.markdown("""
     section[data-testid="stSidebar"] label {
         color: #000000 !important;
     }
-
 
     /* ---------- METRIC CARDS ---------- */
 
@@ -189,7 +174,6 @@ st.markdown("""
         color: #000000 !important;
     }
 
-
     /* ---------- BUTTONS ---------- */
 
     .stButton > button {
@@ -211,8 +195,7 @@ st.markdown("""
         color: #FFFFFF !important;
     }
 
-
-    /* ---------- INPUT BOXES ---------- */
+    /* ---------- INPUTS ---------- */
 
     input,
     textarea {
@@ -226,8 +209,7 @@ st.markdown("""
         color: #555555 !important;
     }
 
-
-    /* ---------- SELECTBOX / DROPDOWN ---------- */
+    /* ---------- SELECTBOX ---------- */
 
     [data-baseweb="select"] {
         background: #FFFFFF !important;
@@ -244,7 +226,6 @@ st.markdown("""
         border-color: #B8DCC0 !important;
     }
 
-
     /* ---------- MULTISELECT ---------- */
 
     [data-baseweb="tag"] {
@@ -256,7 +237,6 @@ st.markdown("""
         color: #000000 !important;
     }
 
-
     /* ---------- NUMBER INPUT ---------- */
 
     div[data-testid="stNumberInput"] input {
@@ -264,8 +244,7 @@ st.markdown("""
         color: #000000 !important;
     }
 
-
-    /* ---------- RADIO BUTTONS ---------- */
+    /* ---------- RADIO ---------- */
 
     div[data-testid="stRadio"] label {
         color: #000000 !important;
@@ -275,13 +254,11 @@ st.markdown("""
         color: #000000 !important;
     }
 
-
     /* ---------- CHECKBOX ---------- */
 
     div[data-testid="stCheckbox"] label {
         color: #000000 !important;
     }
-
 
     /* ---------- TABS ---------- */
 
@@ -295,14 +272,12 @@ st.markdown("""
         color: #000000 !important;
     }
 
-
     /* ---------- DATAFRAME ---------- */
 
     div[data-testid="stDataFrame"] {
         background: #FFFFFF !important;
         border-radius: 14px;
     }
-
 
     /* ---------- ALERTS ---------- */
 
@@ -317,7 +292,6 @@ st.markdown("""
         color: #000000 !important;
     }
 
-
     /* ---------- EXPANDERS ---------- */
 
     div[data-testid="stExpander"] {
@@ -330,13 +304,11 @@ st.markdown("""
         color: #000000 !important;
     }
 
-
     /* ---------- SLIDER ---------- */
 
     div[data-testid="stSlider"] label {
         color: #000000 !important;
     }
-
 
     /* ---------- FILE UPLOADER ---------- */
 
@@ -348,7 +320,6 @@ st.markdown("""
     div[data-testid="stFileUploader"] * {
         color: #000000 !important;
     }
-
 
     /* ---------- FOOTER ---------- */
 
@@ -371,88 +342,140 @@ st.markdown("""
 
 
 # ============================================================
-# LOAD DATA
+# DATA PATH
 # ============================================================
 
 DATA_PATH = "data/air_quality.csv"
 
+
+# ============================================================
+# LOAD DATA
+# ============================================================
+
 @st.cache_data
 def load_data():
+
     df = pd.read_csv(DATA_PATH)
 
+    # Convert timestamp
     if "timestamp" in df.columns:
-        df["timestamp"] = pd.to_datetime(df["timestamp"], errors="coerce")
+        df["timestamp"] = pd.to_datetime(
+            df["timestamp"],
+            errors="coerce"
+        )
 
-    # Convert numeric columns where possible
-    numeric_candidates = [
-        "PM2.5", "PM10", "SO2", "NO2", "CO", "O3",
-        "TEMP", "PRES", "DEWP", "RAIN", "WSPM"
+    # Convert numeric columns
+    numeric_columns = [
+        "PM2.5",
+        "PM10",
+        "SO2",
+        "NO2",
+        "CO",
+        "O3",
+        "TEMP",
+        "PRES",
+        "DEWP",
+        "RAIN",
+        "WSPM"
     ]
 
-    for col in numeric_candidates:
-        if col in df.columns:
-            df[col] = pd.to_numeric(df[col], errors="coerce")
+    for column in numeric_columns:
+        if column in df.columns:
+            df[column] = pd.to_numeric(
+                df[column],
+                errors="coerce"
+            )
+
+    # Create time features if missing
+    if "timestamp" in df.columns:
+
+        if "hour" not in df.columns:
+            df["hour"] = df["timestamp"].dt.hour
+
+        if "month" not in df.columns:
+            df["month"] = df["timestamp"].dt.month
+
+        if "year" not in df.columns:
+            df["year"] = df["timestamp"].dt.year
+
+        if "day_name" not in df.columns:
+            df["day_name"] = df["timestamp"].dt.day_name()
+
+        if "season" not in df.columns:
+            df["season"] = df["month"].map({
+                12: "Winter",
+                1: "Winter",
+                2: "Winter",
+                3: "Spring",
+                4: "Spring",
+                5: "Spring",
+                6: "Summer",
+                7: "Summer",
+                8: "Summer",
+                9: "Autumn",
+                10: "Autumn",
+                11: "Autumn"
+            })
 
     return df
 
 
+# ============================================================
+# LOAD DATA SAFELY
+# ============================================================
+
 try:
+
     df = load_data()
+
 except Exception as e:
-    st.error("Unable to load the air-quality dataset.")
+
+    st.error(
+        "Unable to load the dataset. "
+        "Please make sure data/air_quality.csv exists in the GitHub repository."
+    )
+
     st.code(str(e))
+
     st.stop()
 
 
 # ============================================================
-# HELPER FUNCTIONS
+# AVAILABLE POLLUTANTS
 # ============================================================
 
-def available_columns(columns):
-    return [c for c in columns if c in df.columns]
-
-
-pollutants = available_columns(
-    ["PM2.5", "PM10", "SO2", "NO2", "CO", "O3"]
-)
-
-weather_cols = available_columns(
-    ["TEMP", "PRES", "DEWP", "RAIN", "WSPM"]
-)
-
-
-def risk_level(pm25):
-    if pm25 < 35:
-        return "Low"
-    elif pm25 < 75:
-        return "Moderate"
-    elif pm25 < 150:
-        return "High"
-    else:
-        return "Very High"
+pollutants = [
+    column
+    for column in [
+        "PM2.5",
+        "PM10",
+        "SO2",
+        "NO2",
+        "CO",
+        "O3"
+    ]
+    if column in df.columns
+]
 
 
 # ============================================================
-# SIDEBAR NAVIGATION
+# SIDEBAR
 # ============================================================
 
 st.sidebar.markdown(
     """
-    <div style="text-align:center; padding:15px 5px 20px;">
-        <div style="font-size:3rem;">🌿</div>
-        <h2 style="color:#123B20 !important; margin-bottom:2px;">
-            AirAware
-        </h2>
-        <p style="color:#333333 !important;">
-            Urban Air Intelligence
-        </p>
-    </div>
+    <h2>🌿 AirAware</h2>
+    <p>
+    Urban Air Intelligence Platform
+    </p>
     """,
     unsafe_allow_html=True
 )
 
+st.sidebar.markdown("---")
+
 page = st.sidebar.radio(
-    "Explore the platform",
+    "Navigate",
     [
         "🌱 Mission Control",
         "📈 Pollution Patterns",
@@ -466,14 +489,23 @@ page = st.sidebar.radio(
 
 st.sidebar.markdown("---")
 
+if pollutants:
+
+    selected_pollutant = st.sidebar.selectbox(
+        "Select Pollutant",
+        pollutants,
+        index=0
+    )
+
+else:
+
+    selected_pollutant = None
+
 st.sidebar.markdown(
     """
-    <div class="card" style="padding:16px;">
-        <h3>🌍 Project Vision</h3>
-        <p>
-        AirAware transforms real-world environmental data into
-        understandable insights about urban air quality.
-        </p>
+    <div class="card">
+        <b>Dataset</b><br>
+        Real-world Beijing multi-site air-quality observations.
     </div>
     """,
     unsafe_allow_html=True
@@ -481,19 +513,22 @@ st.sidebar.markdown(
 
 
 # ============================================================
-# HERO
+# HERO HEADER
 # ============================================================
 
 st.markdown(
     """
     <div class="hero">
+
         <h1>🌿 AirAware</h1>
+
         <p>
-            <b>Urban Air Intelligence Platform</b><br>
-            Explore pollution patterns, environmental relationships,
-            monitoring-station behavior and air-risk scenarios using
-            real-world air-quality observations.
+        <b>Urban Air Intelligence Platform</b><br>
+        Explore real-world pollution patterns, environmental
+        relationships, monitoring-station behavior and air-risk
+        scenarios through interactive data analytics.
         </p>
+
     </div>
     """,
     unsafe_allow_html=True
@@ -501,7 +536,7 @@ st.markdown(
 
 
 # ============================================================
-# MISSION CONTROL
+# PAGE 1 — MISSION CONTROL
 # ============================================================
 
 if page == "🌱 Mission Control":
@@ -512,111 +547,156 @@ if page == "🌱 Mission Control":
     )
 
     st.markdown(
-        '<div class="section-subtitle">A high-level view of the urban air-quality dataset.</div>',
+        """
+        <div class="section-subtitle">
+        A high-level view of the urban air-quality environment.
+        </div>
+        """,
         unsafe_allow_html=True
     )
 
-    c1, c2, c3, c4 = st.columns(4)
+    # ---------------- METRICS ----------------
 
-    with c1:
-        st.metric("📊 Observations", f"{len(df):,}")
-
-    with c2:
-        if "station" in df.columns:
-            st.metric("📍 Monitoring Stations", df["station"].nunique())
-        else:
-            st.metric("📍 Monitoring Stations", "N/A")
-
-    with c3:
-        st.metric("🧪 Pollutants Tracked", len(pollutants))
-
-    with c4:
-        if "timestamp" in df.columns:
-            days = df["timestamp"].dt.date.nunique()
-            st.metric("📅 Days Observed", f"{days:,}")
-        else:
-            st.metric("📅 Days Observed", "N/A")
-
-    st.markdown("<br>", unsafe_allow_html=True)
-
-    col1, col2 = st.columns(2)
+    col1, col2, col3, col4 = st.columns(4)
 
     with col1:
-        st.markdown(
-            """
-            <div class="card">
-                <h3>🌍 Why AirAware?</h3>
-                <p>
-                Air pollution changes across time, locations and
-                environmental conditions. AirAware provides an interactive
-                way to investigate these patterns rather than looking at
-                isolated pollutant measurements.
-                </p>
-                <p>
-                The platform can help students, analysts, researchers and
-                future smart-city systems understand how pollution behaves.
-                </p>
-            </div>
-            """,
-            unsafe_allow_html=True
+        st.metric(
+            "Total Records",
+            f"{len(df):,}"
         )
 
     with col2:
-        st.markdown(
-            """
-            <div class="card">
-                <h3>🚀 Future-Ready Direction</h3>
-                <p>
-                AirAware can evolve from historical analysis into a
-                real-time environmental intelligence system.
-                </p>
-                <p>
-                Future extensions could include live sensor feeds,
-                machine-learning forecasting, anomaly detection,
-                personalized alerts and city-level pollution maps.
-                </p>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
 
-    if "timestamp" in df.columns and pollutants:
+        if "station" in df.columns:
+            st.metric(
+                "Monitoring Stations",
+                f"{df['station'].nunique():,}"
+            )
+
+    with col3:
+
+        if "timestamp" in df.columns:
+
+            start_date = df["timestamp"].min()
+
+            st.metric(
+                "Data Start",
+                start_date.strftime("%b %Y")
+                if pd.notna(start_date)
+                else "N/A"
+            )
+
+    with col4:
+
+        if "timestamp" in df.columns:
+
+            end_date = df["timestamp"].max()
+
+            st.metric(
+                "Data End",
+                end_date.strftime("%b %Y")
+                if pd.notna(end_date)
+                else "N/A"
+            )
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # ---------------- DAILY TREND ----------------
+
+    if selected_pollutant and "timestamp" in df.columns:
 
         daily = (
-            df.set_index("timestamp")[pollutants]
-            .resample("D")
+            df.groupby(
+                df["timestamp"].dt.date
+            )[selected_pollutant]
             .mean()
             .reset_index()
         )
 
-        selected_pollutant = st.selectbox(
-            "Choose a pollutant for the trend",
-            pollutants
+        daily.columns = [
+            "date",
+            selected_pollutant
+        ]
+
+        daily["date"] = pd.to_datetime(
+            daily["date"]
         )
 
         fig = px.line(
             daily,
-            x="timestamp",
+            x="date",
             y=selected_pollutant,
             title=f"Daily Average {selected_pollutant}"
+        )
+
+        fig.update_traces(
+            mode="lines+markers",
+            marker=dict(size=5),
+            hovertemplate=(
+                "Date: %{x}<br>"
+                f"{selected_pollutant}: %{{y:.2f}}"
+                "<extra></extra>"
+            )
         )
 
         fig.update_layout(
             template="simple_white",
             paper_bgcolor="white",
             plot_bgcolor="white",
-            font=dict(color="#111111"),
-            title_font=dict(color="#123B20", size=18),
-            hovermode="x unified"
+            font=dict(color="black"),
+            title_font=dict(
+                color="black",
+                size=18
+            ),
+            xaxis=dict(
+                title="Date",
+                title_font=dict(color="black"),
+                tickfont=dict(color="black")
+            ),
+            yaxis=dict(
+                title=selected_pollutant,
+                title_font=dict(color="black"),
+                tickfont=dict(color="black")
+            )
         )
 
-        st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.plotly_chart(fig, use_container_width=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+        st.plotly_chart(
+            fig,
+            use_container_width=True
+        )
+
+    # ---------------- INSIGHT ----------------
+
+    if selected_pollutant:
+
+        average_value = df[selected_pollutant].mean()
+
+        st.markdown(
+            f"""
+            <div class="card">
+
+            <h3>💡 Air Quality Insight</h3>
+
+            <p>
+            The average recorded <b>{selected_pollutant}</b>
+            concentration in the available dataset is
+            <b>{average_value:.2f}</b>.
+            </p>
+
+            <p>
+            AirAware transforms historical observations into
+            interactive intelligence that can support future
+            real-time environmental monitoring systems.
+            </p>
+
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
 
 # ============================================================
-# POLLUTION PATTERNS
+# PAGE 2 — POLLUTION PATTERNS
 # ============================================================
 
 elif page == "📈 Pollution Patterns":
@@ -627,96 +707,198 @@ elif page == "📈 Pollution Patterns":
     )
 
     st.markdown(
-        '<div class="section-subtitle">Discover how pollutant concentrations change over time.</div>',
+        """
+        <div class="section-subtitle">
+        Discover how pollution changes across time and hours of the day.
+        </div>
+        """,
         unsafe_allow_html=True
     )
 
-    if "timestamp" in df.columns and pollutants:
+    if selected_pollutant and "timestamp" in df.columns:
 
-        pollutant = st.selectbox(
-            "Select pollutant",
-            pollutants
-        )
+        # ---------------- DAILY ----------------
 
         trend = (
-            df.set_index("timestamp")[pollutant]
-            .resample("D")
+            df.groupby(
+                df["timestamp"].dt.date
+            )[selected_pollutant]
             .mean()
             .reset_index()
+        )
+
+        trend.columns = [
+            "timestamp",
+            selected_pollutant
+        ]
+
+        trend["timestamp"] = pd.to_datetime(
+            trend["timestamp"]
         )
 
         fig = px.line(
             trend,
             x="timestamp",
-            y=pollutant,
-            title=f"{pollutant} — Daily Pollution Trend"
+            y=selected_pollutant,
+            title=f"{selected_pollutant} — Daily Pollution Trend"
+        )
+
+        fig.update_traces(
+            mode="lines+markers",
+            marker=dict(size=5),
+            hovertemplate=(
+                "Date: %{x}<br>"
+                f"{selected_pollutant}: %{{y:.2f}}"
+                "<extra></extra>"
+            )
         )
 
         fig.update_layout(
             template="simple_white",
             paper_bgcolor="white",
             plot_bgcolor="white",
-            font=dict(color="#111111"),
-            title_font=dict(color="#123B20"),
-            xaxis_title="Date",
-            yaxis_title=pollutant
+            font=dict(color="black"),
+            title_font=dict(
+                color="black",
+                size=18
+            ),
+            xaxis=dict(
+                title="Date",
+                title_font=dict(color="black"),
+                tickfont=dict(color="black")
+            ),
+            yaxis=dict(
+                title=selected_pollutant,
+                title_font=dict(color="black"),
+                tickfont=dict(color="black")
+            )
         )
 
-        st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.plotly_chart(fig, use_container_width=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+        st.plotly_chart(
+            fig,
+            use_container_width=True
+        )
 
-        c1, c2, c3 = st.columns(3)
+        # ---------------- HOURLY ----------------
 
-        with c1:
-            st.metric(
-                "Average",
-                f"{df[pollutant].mean():.2f}"
+        hourly = (
+            df.groupby("hour")[selected_pollutant]
+            .mean()
+            .reset_index()
+        )
+
+        fig2 = px.line(
+            hourly,
+            x="hour",
+            y=selected_pollutant,
+            markers=True,
+            title=f"Average {selected_pollutant} by Hour"
+        )
+
+        fig2.update_traces(
+            mode="lines+markers+text",
+            text=hourly[selected_pollutant].round(2),
+            textposition="top center",
+            textfont=dict(
+                color="black",
+                size=11
+            ),
+            hovertemplate=(
+                "Hour: %{x}<br>"
+                f"{selected_pollutant}: %{{y:.2f}}"
+                "<extra></extra>"
             )
+        )
 
-        with c2:
-            st.metric(
-                "Maximum",
-                f"{df[pollutant].max():.2f}"
+        fig2.update_layout(
+            template="simple_white",
+            paper_bgcolor="white",
+            plot_bgcolor="white",
+            font=dict(color="black"),
+            title_font=dict(
+                color="black",
+                size=18
+            ),
+            xaxis=dict(
+                title="Hour of Day",
+                title_font=dict(color="black"),
+                tickfont=dict(color="black")
+            ),
+            yaxis=dict(
+                title=f"Average {selected_pollutant}",
+                title_font=dict(color="black"),
+                tickfont=dict(color="black")
             )
+        )
 
-        with c3:
-            st.metric(
-                "Minimum",
-                f"{df[pollutant].min():.2f}"
+        st.plotly_chart(
+            fig2,
+            use_container_width=True
+        )
+
+        # ---------------- MONTHLY ----------------
+
+        monthly = (
+            df.groupby(
+                ["year", "month"]
+            )[selected_pollutant]
+            .mean()
+            .reset_index()
+        )
+
+        monthly["period"] = (
+            monthly["year"].astype(str)
+            + "-"
+            + monthly["month"].astype(str).str.zfill(2)
+        )
+
+        fig3 = px.bar(
+            monthly,
+            x="period",
+            y=selected_pollutant,
+            title=f"Average {selected_pollutant} by Month",
+            text=selected_pollutant
+        )
+
+        fig3.update_traces(
+            texttemplate="%{text:.2f}",
+            textposition="outside",
+            textfont=dict(
+                color="black",
+                size=11
+            ),
+            cliponaxis=False
+        )
+
+        fig3.update_layout(
+            template="simple_white",
+            paper_bgcolor="white",
+            plot_bgcolor="white",
+            font=dict(color="black"),
+            title_font=dict(
+                color="black",
+                size=18
+            ),
+            xaxis=dict(
+                title="Month",
+                title_font=dict(color="black"),
+                tickfont=dict(color="black")
+            ),
+            yaxis=dict(
+                title=f"Average {selected_pollutant}",
+                title_font=dict(color="black"),
+                tickfont=dict(color="black")
             )
+        )
 
-        st.markdown("<br>", unsafe_allow_html=True)
-
-        if "hour" in df.columns:
-
-            hourly = df.groupby("hour")[pollutant].mean().reset_index()
-
-            fig2 = px.line(
-                hourly,
-                x="hour",
-                y=pollutant,
-                markers=True,
-                title=f"Average {pollutant} by Hour"
-            )
-
-            fig2.update_layout(
-                template="simple_white",
-                paper_bgcolor="white",
-                plot_bgcolor="white",
-                font=dict(color="#111111"),
-                title_font=dict(color="#123B20"),
-                xaxis_title="Hour of Day",
-                yaxis_title=f"Average {pollutant}"
-            )
-
-            st.markdown('<div class="card">', unsafe_allow_html=True)
-            st.plotly_chart(fig2, use_container_width=True)
-            st.markdown('</div>', unsafe_allow_html=True)
+        st.plotly_chart(
+            fig3,
+            use_container_width=True
+        )
 
 
 # ============================================================
-# WEATHER & POLLUTION
+# PAGE 3 — WEATHER & POLLUTION
 # ============================================================
 
 elif page == "🌦️ Weather & Pollution":
@@ -727,73 +909,113 @@ elif page == "🌦️ Weather & Pollution":
     )
 
     st.markdown(
-        '<div class="section-subtitle">Explore relationships between atmospheric conditions and pollution.</div>',
+        """
+        <div class="section-subtitle">
+        Explore relationships between environmental conditions
+        and pollutant concentrations.
+        </div>
+        """,
         unsafe_allow_html=True
     )
 
-    if not weather_cols or not pollutants:
-        st.warning("Weather or pollutant columns are unavailable.")
-    else:
+    weather_variables = [
+        column
+        for column in [
+            "TEMP",
+            "PRES",
+            "DEWP",
+            "RAIN",
+            "WSPM"
+        ]
+        if column in df.columns
+    ]
+
+    if weather_variables and selected_pollutant:
 
         weather = st.selectbox(
-            "Select environmental factor",
-            weather_cols
+            "Select Environmental Variable",
+            weather_variables
         )
 
-        pollutant = st.selectbox(
-            "Select pollutant",
-            pollutants
-        )
+        plot_df = df[
+            [weather, selected_pollutant]
+        ].dropna()
 
-        plot_df = df[[weather, pollutant]].dropna()
+        scatter_data = plot_df.sample(
+            min(10000, len(plot_df)),
+            random_state=42
+        )
 
         fig = px.scatter(
-            plot_df.sample(min(10000, len(plot_df)), random_state=42),
+            scatter_data,
             x=weather,
-            y=pollutant,
+            y=selected_pollutant,
             trendline="ols",
             opacity=0.55,
-            title=f"{pollutant} vs {weather}"
+            title=f"{selected_pollutant} vs {weather}"
+        )
+
+        fig.update_traces(
+            marker=dict(size=7),
+            hovertemplate=(
+                f"{weather}: %{{x:.2f}}"
+                f"<br>{selected_pollutant}: %{{y:.2f}}"
+                "<extra></extra>"
+            )
         )
 
         fig.update_layout(
             template="simple_white",
             paper_bgcolor="white",
             plot_bgcolor="white",
-            font=dict(color="#111111"),
-            title_font=dict(color="#123B20")
+            font=dict(color="black"),
+            title_font=dict(
+                color="black",
+                size=18
+            ),
+            xaxis=dict(
+                title=weather,
+                title_font=dict(color="black"),
+                tickfont=dict(color="black")
+            ),
+            yaxis=dict(
+                title=selected_pollutant,
+                title_font=dict(color="black"),
+                tickfont=dict(color="black")
+            )
         )
 
-        st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.plotly_chart(fig, use_container_width=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+        st.plotly_chart(
+            fig,
+            use_container_width=True
+        )
 
-        correlation = plot_df[weather].corr(plot_df[pollutant])
-
-        st.markdown('<div class="card">', unsafe_allow_html=True)
+        # ---------------- WEATHER SUMMARY ----------------
 
         st.markdown(
-            f"""
-            <h3>🔎 Observed Relationship</h3>
+            """
+            <div class="card">
+
+            <h3>🌦️ Environmental Context</h3>
+
             <p>
-            The correlation between <b>{weather}</b> and
-            <b>{pollutant}</b> in the selected observations is:
+            Weather conditions can influence pollutant dispersion,
+            accumulation and atmospheric behavior.
             </p>
-            <h2 style="color:#2E7D4F !important;">
-            {correlation:.3f}
-            </h2>
+
             <p>
-            Correlation indicates statistical association, not causation.
+            This visualization helps identify potential relationships
+            between environmental conditions and air pollution.
             </p>
+
+            </div>
             """,
             unsafe_allow_html=True
         )
 
-        st.markdown('</div>', unsafe_allow_html=True)
-
 
 # ============================================================
-# STATION INTELLIGENCE
+# PAGE 4 — STATION INTELLIGENCE
 # ============================================================
 
 elif page == "📍 Station Intelligence":
@@ -804,70 +1026,130 @@ elif page == "📍 Station Intelligence":
     )
 
     st.markdown(
-        '<div class="section-subtitle">Compare pollution behavior across monitoring stations.</div>',
+        """
+        <div class="section-subtitle">
+        Compare pollution levels across monitoring stations.
+        </div>
+        """,
         unsafe_allow_html=True
     )
 
-    if "station" not in df.columns:
-        st.warning("Station information is unavailable.")
-    else:
-
-        pollutant = st.selectbox(
-            "Select pollutant",
-            pollutants
-        )
+    if (
+        "station" in df.columns
+        and selected_pollutant
+    ):
 
         station_avg = (
-            df.groupby("station")[pollutant]
+            df.groupby("station")[selected_pollutant]
             .mean()
-            .sort_values(ascending=False)
             .reset_index()
+            .sort_values(
+                selected_pollutant,
+                ascending=False
+            )
         )
+
+        # ---------------- BAR CHART ----------------
 
         fig = px.bar(
             station_avg,
             x="station",
-            y=pollutant,
-            title=f"Average {pollutant} by Monitoring Station"
+            y=selected_pollutant,
+            title=f"Average {selected_pollutant} by Monitoring Station",
+            text=selected_pollutant
+        )
+
+        fig.update_traces(
+            texttemplate="%{text:.2f}",
+            textposition="outside",
+            textfont=dict(
+                color="black",
+                size=13
+            ),
+            cliponaxis=False,
+            hovertemplate=(
+                "Station: %{x}<br>"
+                f"Average {selected_pollutant}: %{{y:.2f}}"
+                "<extra></extra>"
+            )
         )
 
         fig.update_layout(
             template="simple_white",
             paper_bgcolor="white",
             plot_bgcolor="white",
-            font=dict(color="#111111"),
-            title_font=dict(color="#123B20"),
-            xaxis_title="Monitoring Station",
-            yaxis_title=f"Average {pollutant}"
+            font=dict(color="black"),
+            title_font=dict(
+                color="black",
+                size=18
+            ),
+            xaxis=dict(
+                title="Monitoring Station",
+                title_font=dict(color="black"),
+                tickfont=dict(color="black")
+            ),
+            yaxis=dict(
+                title=f"Average {selected_pollutant}",
+                title_font=dict(color="black"),
+                tickfont=dict(color="black")
+            ),
+            uniformtext_minsize=9,
+            uniformtext_mode="hide"
         )
 
-        st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.plotly_chart(fig, use_container_width=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+        st.plotly_chart(
+            fig,
+            use_container_width=True
+        )
+
+        # ---------------- TOP STATION ----------------
+
+        top_station = station_avg.iloc[0]
 
         st.markdown(
-            '<div class="card">',
+            f"""
+            <div class="card">
+
+            <h3>📍 Station Insight</h3>
+
+            <p>
+            The station with the highest average
+            <b>{selected_pollutant}</b> in the available dataset is
+            <b>{top_station["station"]}</b>.
+            </p>
+
+            <p>
+            Recorded average:
+            <b>{top_station[selected_pollutant]:.2f}</b>
+            </p>
+
+            </div>
+            """,
             unsafe_allow_html=True
         )
 
-        st.markdown("### 📊 Station Summary")
+        # ---------------- STATION TABLE ----------------
 
-        summary = (
-            df.groupby("station")[pollutants]
-            .mean()
+        st.markdown(
+            "### 📊 Station Comparison"
+        )
+
+        display_station = station_avg.copy()
+
+        display_station[selected_pollutant] = (
+            display_station[selected_pollutant]
             .round(2)
         )
 
         st.dataframe(
-            summary,
-            use_container_width=True
+            display_station,
+            use_container_width=True,
+            hide_index=True
         )
-
-        st.markdown('</div>', unsafe_allow_html=True)
 
 
 # ============================================================
-# CORRELATION LAB
+# PAGE 5 — CORRELATION LAB
 # ============================================================
 
 elif page == "🔬 Correlation Lab":
@@ -878,13 +1160,33 @@ elif page == "🔬 Correlation Lab":
     )
 
     st.markdown(
-        '<div class="section-subtitle">Investigate relationships between pollutants and environmental variables.</div>',
+        """
+        <div class="section-subtitle">
+        Examine relationships between pollutants and environmental variables.
+        </div>
+        """,
         unsafe_allow_html=True
     )
 
-    correlation_cols = pollutants + weather_cols
+    correlation_columns = [
+        column
+        for column in [
+            "PM2.5",
+            "PM10",
+            "SO2",
+            "NO2",
+            "CO",
+            "O3",
+            "TEMP",
+            "PRES",
+            "DEWP",
+            "RAIN",
+            "WSPM"
+        ]
+        if column in df.columns
+    ]
 
-    corr = df[correlation_cols].corr()
+    corr = df[correlation_columns].corr()
 
     fig = px.imshow(
         corr,
@@ -893,30 +1195,55 @@ elif page == "🔬 Correlation Lab":
         title="Environmental Correlation Matrix"
     )
 
+    fig.update_traces(
+        textfont=dict(
+            color="black",
+            size=11
+        )
+    )
+
     fig.update_layout(
         paper_bgcolor="white",
         plot_bgcolor="white",
-        font=dict(color="#111111"),
-        title_font=dict(color="#123B20")
+        font=dict(color="black"),
+        title_font=dict(
+            color="black",
+            size=18
+        ),
+        xaxis=dict(
+            title="Variables",
+            title_font=dict(color="black"),
+            tickfont=dict(color="black")
+        ),
+        yaxis=dict(
+            title="Variables",
+            title_font=dict(color="black"),
+            tickfont=dict(color="black")
+        )
     )
 
-    st.markdown('<div class="card">', unsafe_allow_html=True)
-    st.plotly_chart(fig, use_container_width=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+    st.plotly_chart(
+        fig,
+        use_container_width=True
+    )
 
     st.markdown(
         """
         <div class="card">
-            <h3>🧠 How to read this</h3>
-            <p>
-            Values closer to <b>+1</b> indicate a stronger positive
-            association, while values closer to <b>-1</b> indicate a
-            stronger negative association.
-            </p>
-            <p>
-            A value near <b>0</b> indicates a weaker linear association.
-            Correlation alone does not establish cause and effect.
-            </p>
+
+        <h3>🔎 How to read this matrix</h3>
+
+        <p>
+        Correlation values closer to <b>+1</b> indicate a strong
+        positive relationship, while values closer to <b>-1</b>
+        indicate a strong negative relationship.
+        </p>
+
+        <p>
+        Values close to <b>0</b> indicate a weaker linear relationship.
+        Correlation does not by itself prove causation.
+        </p>
+
         </div>
         """,
         unsafe_allow_html=True
@@ -924,7 +1251,7 @@ elif page == "🔬 Correlation Lab":
 
 
 # ============================================================
-# AIR RISK SIMULATOR
+# PAGE 6 — AIR RISK SIMULATOR
 # ============================================================
 
 elif page == "🧪 Air Risk Simulator":
@@ -935,18 +1262,10 @@ elif page == "🧪 Air Risk Simulator":
     )
 
     st.markdown(
-        '<div class="section-subtitle">Enter pollutant values to explore a simple educational risk scenario.</div>',
-        unsafe_allow_html=True
-    )
-
-    st.markdown(
         """
-        <div class="card">
-            <h3>🌱 Try Your Own Scenario</h3>
-            <p>
-            Enter approximate pollutant concentrations and AirAware will
-            classify the PM2.5 scenario into a simple educational risk level.
-            </p>
+        <div class="section-subtitle">
+        Enter pollutant observations to explore a simple
+        educational air-risk scenario.
         </div>
         """,
         unsafe_allow_html=True
@@ -955,74 +1274,125 @@ elif page == "🧪 Air Risk Simulator":
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        pm25 = st.number_input(
+
+        pm25_input = st.number_input(
             "PM2.5",
             min_value=0.0,
-            max_value=1000.0,
             value=35.0,
             step=1.0
         )
 
     with col2:
-        pm10 = st.number_input(
+
+        pm10_input = st.number_input(
             "PM10",
             min_value=0.0,
-            max_value=1500.0,
             value=50.0,
             step=1.0
         )
 
     with col3:
-        no2 = st.number_input(
+
+        no2_input = st.number_input(
             "NO2",
             min_value=0.0,
-            max_value=500.0,
-            value=20.0,
+            value=40.0,
             step=1.0
         )
 
-    level = risk_level(pm25)
+    # ---------------- RISK LOGIC ----------------
 
-    if level == "Low":
-        message = "The entered PM2.5 value falls into the lower-risk scenario range."
-    elif level == "Moderate":
-        message = "The entered PM2.5 value represents a moderate pollution scenario."
-    elif level == "High":
-        message = "The entered PM2.5 value represents a high pollution scenario."
+    risk_score = (
+        (pm25_input / 35)
+        + (pm10_input / 50)
+        + (no2_input / 40)
+    ) / 3
+
+    if risk_score < 0.8:
+
+        risk_level = "Low"
+
+        explanation = (
+            "The entered values represent a relatively lower "
+            "pollution scenario based on this simple educational model."
+        )
+
+    elif risk_score < 1.5:
+
+        risk_level = "Moderate"
+
+        explanation = (
+            "The entered values represent a moderate pollution "
+            "scenario. Monitoring trends can provide additional context."
+        )
+
+    elif risk_score < 2.5:
+
+        risk_level = "High"
+
+        explanation = (
+            "The entered values represent a higher pollution scenario "
+            "under this simplified model."
+        )
+
     else:
-        message = "The entered PM2.5 value represents a very high pollution scenario."
 
-    st.markdown("<br>", unsafe_allow_html=True)
+        risk_level = "Very High"
+
+        explanation = (
+            "The entered values represent a very high pollution "
+            "scenario under this simplified model."
+        )
 
     st.markdown(
         f"""
-        <div class="card" style="text-align:center;">
-            <div style="font-size:3rem;">🌿</div>
-            <h2 style="color:#123B20 !important;">
-                {level} Risk Scenario
-            </h2>
-            <p>{message}</p>
-            <hr>
-            <p>
-                <b>PM2.5:</b> {pm25:.1f}
-                &nbsp;&nbsp; | &nbsp;&nbsp;
-                <b>PM10:</b> {pm10:.1f}
-                &nbsp;&nbsp; | &nbsp;&nbsp;
-                <b>NO2:</b> {no2:.1f}
-            </p>
+        <div class="card">
+
+        <h2>🌿 Estimated Scenario: {risk_level}</h2>
+
+        <p>
+        {explanation}
+        </p>
+
+        <p>
+        <b>Important:</b> This simulator is an educational
+        data-analytics feature and is not a medical or regulatory
+        air-quality warning system.
+        </p>
+
         </div>
         """,
         unsafe_allow_html=True
     )
 
-    st.info(
-        "Educational simulator only. This is not an official AQI calculator, "
-        "medical assessment or regulatory air-quality warning system."
-    )
+    # ---------------- INPUT SUMMARY ----------------
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+
+        st.metric(
+            "PM2.5",
+            f"{pm25_input:.1f}"
+        )
+
+    with col2:
+
+        st.metric(
+            "PM10",
+            f"{pm10_input:.1f}"
+        )
+
+    with col3:
+
+        st.metric(
+            "NO2",
+            f"{no2_input:.1f}"
+        )
 
 
 # ============================================================
-# DATA QUALITY
+# PAGE 7 — DATA QUALITY
 # ============================================================
 
 elif page == "📋 Data Quality":
@@ -1033,64 +1403,98 @@ elif page == "📋 Data Quality":
     )
 
     st.markdown(
-        '<div class="section-subtitle">Understand the structure and completeness of the dataset.</div>',
+        """
+        <div class="section-subtitle">
+        Understand the structure and completeness of the dataset.
+        </div>
+        """,
         unsafe_allow_html=True
     )
 
-    c1, c2, c3 = st.columns(3)
+    # ---------------- DATASET METRICS ----------------
 
-    with c1:
-        st.metric("Rows", f"{len(df):,}")
+    col1, col2, col3, col4 = st.columns(4)
 
-    with c2:
-        st.metric("Columns", len(df.columns))
+    with col1:
 
-    with c3:
-        missing_pct = df.isna().mean().mean() * 100
-        st.metric("Overall Missingness", f"{missing_pct:.2f}%")
+        st.metric(
+            "Rows",
+            f"{df.shape[0]:,}"
+        )
+
+    with col2:
+
+        st.metric(
+            "Columns",
+            f"{df.shape[1]:,}"
+        )
+
+    with col3:
+
+        missing_values = int(
+            df.isna().sum().sum()
+        )
+
+        st.metric(
+            "Missing Values",
+            f"{missing_values:,}"
+        )
+
+    with col4:
+
+        memory_mb = (
+            df.memory_usage(deep=True)
+            .sum()
+            / (1024 ** 2)
+        )
+
+        st.metric(
+            "Memory Usage",
+            f"{memory_mb:.2f} MB"
+        )
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    missing = (
+    # ---------------- MISSING VALUE TABLE ----------------
+
+    st.markdown(
+        "### 🔍 Missing Values by Column"
+    )
+
+    missing_df = (
         df.isna()
         .sum()
-        .sort_values(ascending=False)
         .reset_index()
     )
 
-    missing.columns = ["Column", "Missing Values"]
+    missing_df.columns = [
+        "Column",
+        "Missing Values"
+    ]
 
-    missing["Missing %"] = (
-        missing["Missing Values"] / len(df) * 100
+    missing_df["Missing %"] = (
+        missing_df["Missing Values"]
+        / len(df)
+        * 100
     ).round(2)
 
-    st.markdown(
-        '<div class="card">',
-        unsafe_allow_html=True
-    )
-
-    st.markdown("### 🔍 Missing-Value Analysis")
-
     st.dataframe(
-        missing,
-        use_container_width=True
+        missing_df,
+        use_container_width=True,
+        hide_index=True
     )
 
-    st.markdown('</div>', unsafe_allow_html=True)
+    # ---------------- DATA PREVIEW ----------------
 
     st.markdown(
-        '<div class="card">',
-        unsafe_allow_html=True
+        "### 👀 Dataset Preview"
     )
-
-    st.markdown("### 👀 Dataset Preview")
 
     st.dataframe(
         df.head(20),
-        use_container_width=True
+        use_container_width=True,
+        hide_index=True
     )
-
-    st.markdown('</div>', unsafe_allow_html=True)
 
 
 # ============================================================
@@ -1100,9 +1504,20 @@ elif page == "📋 Data Quality":
 st.markdown(
     """
     <div class="footer">
-        🌿 <b>AirAware — Urban Air Intelligence Platform</b><br>
-        Built with Python, Pandas, Plotly and Streamlit<br>
-        Real-world environmental data • Exploratory Data Analysis • Interactive Analytics
+
+        <p>
+        🌿 <b>AirAware</b> — Urban Air Intelligence Platform
+        </p>
+
+        <p>
+        Built with Python • Pandas • Plotly • Streamlit
+        </p>
+
+        <p>
+        Real-world air-quality data analytics for
+        smarter environmental insight.
+        </p>
+
     </div>
     """,
     unsafe_allow_html=True
