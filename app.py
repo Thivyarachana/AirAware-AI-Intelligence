@@ -22,11 +22,10 @@ st.set_page_config(
 # ============================================================
 
 st.markdown("""
-st.markdown("""
 <style>
 
 /* =====================================================
-   AIR AWARE — CLEAN WHITE CARD / BLACK TEXT THEME
+   AIR AWARE - CLEAN WHITE CARD / BLACK TEXT THEME
    ===================================================== */
 
 /* ---------- MAIN BACKGROUND ---------- */
