@@ -22,320 +22,355 @@ st.set_page_config(
 # ============================================================
 
 st.markdown("""
+st.markdown("""
 <style>
 
-    /* =====================================================
-       AIR AWARE — LIGHT GREEN + WHITE CARD UI
-       ALL TEXT BLACK
-       ===================================================== */
+/* =====================================================
+   AIR AWARE — CLEAN WHITE CARD / BLACK TEXT THEME
+   ===================================================== */
 
-    .stApp {
-        background: #EAF7EE !important;
-        color: #000000 !important;
-    }
+/* ---------- MAIN BACKGROUND ---------- */
 
-    html, body {
-        background: #EAF7EE !important;
-        color: #000000 !important;
-    }
+.stApp {
+    background-color: #EAF7EE !important;
+}
 
-    .stApp,
-    .stApp p,
-    .stApp span,
-    .stApp div,
-    .stApp label,
-    .stApp li,
-    .stApp small,
-    .stMarkdown,
-    .stMarkdown p,
-    .stMarkdown span,
-    .stMarkdown div,
-    [data-testid="stMarkdownContainer"],
-    [data-testid="stMarkdownContainer"] p,
-    [data-testid="stMarkdownContainer"] span,
-    [data-testid="stText"],
-    h1, h2, h3, h4, h5, h6 {
-        color: #000000 !important;
-    }
 
-    .block-container {
-        padding-top: 2rem;
-        padding-bottom: 3rem;
-        max-width: 1450px;
-    }
+/* ---------- MAIN CONTENT ---------- */
 
-    /* ---------- HERO ---------- */
+.block-container {
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+    max-width: 1450px;
+}
 
-    .hero {
-        background: #FFFFFF !important;
-        border: 2px solid #B7DCC0;
-        border-radius: 24px;
-        padding: 38px 42px;
-        margin-bottom: 25px;
-        box-shadow: 0 8px 25px rgba(49, 104, 65, 0.10);
-    }
 
-    .hero h1 {
-        color: #000000 !important;
-        font-size: 3rem;
-        font-weight: 800;
-        margin-bottom: 8px;
-    }
+/* =====================================================
+   HERO CARD
+   ===================================================== */
 
-    .hero p {
-        color: #000000 !important;
-        font-size: 1.12rem;
-        line-height: 1.7;
-        margin-bottom: 0;
-    }
+.hero {
+    background-color: #FFFFFF !important;
+    background: #FFFFFF !important;
 
-    /* ---------- SECTION TITLES ---------- */
+    border: 2px solid #B7DCC0 !important;
+    border-radius: 22px !important;
 
-    .section-title {
-        color: #000000 !important;
-        font-size: 1.8rem;
-        font-weight: 750;
-        margin-top: 15px;
-        margin-bottom: 8px;
-    }
+    padding: 35px 40px !important;
+    margin-bottom: 25px !important;
 
-    .section-subtitle {
-        color: #000000 !important;
-        font-size: 1rem;
-        margin-bottom: 18px;
-    }
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08) !important;
+}
 
-    /* ---------- WHITE CARDS ---------- */
+.hero h1 {
+    color: #000000 !important;
+    background-color: transparent !important;
 
-    .card {
-        background: #FFFFFF !important;
-        color: #000000 !important;
-        border: 1px solid #C9E2CE;
-        border-radius: 18px;
-        padding: 24px;
-        margin: 12px 0;
-        box-shadow: 0 5px 18px rgba(28, 75, 39, 0.08);
-    }
+    font-size: 3rem;
+    font-weight: 800;
 
-    .card h1,
-    .card h2,
-    .card h3,
-    .card h4,
-    .card h5,
-    .card h6,
-    .card p,
-    .card span,
-    .card div {
-        color: #000000 !important;
-    }
+    margin-bottom: 10px;
+}
 
-    /* ---------- SIDEBAR ---------- */
+.hero p {
+    color: #000000 !important;
+    background-color: transparent !important;
 
-    section[data-testid="stSidebar"] {
-        background: #D8F0DE !important;
-        border-right: 1px solid #B8DCC0;
-    }
+    font-size: 1.1rem;
+    line-height: 1.7;
+}
 
-    section[data-testid="stSidebar"] * {
-        color: #000000 !important;
-    }
 
-    section[data-testid="stSidebar"] h1,
-    section[data-testid="stSidebar"] h2,
-    section[data-testid="stSidebar"] h3,
-    section[data-testid="stSidebar"] h4,
-    section[data-testid="stSidebar"] p,
-    section[data-testid="stSidebar"] span,
-    section[data-testid="stSidebar"] label {
-        color: #000000 !important;
-    }
+/* =====================================================
+   SECTION TITLES
+   ===================================================== */
 
-    /* ---------- METRIC CARDS ---------- */
+.section-title {
+    color: #000000 !important;
+    font-size: 1.8rem;
+    font-weight: 750;
+    margin-top: 15px;
+    margin-bottom: 8px;
+}
 
-    div[data-testid="stMetric"] {
-        background: #FFFFFF !important;
-        border: 1px solid #C9E2CE;
-        border-radius: 16px;
-        padding: 18px;
-        box-shadow: 0 5px 18px rgba(28, 75, 39, 0.07);
-    }
+.section-subtitle {
+    color: #000000 !important;
+    font-size: 1rem;
+    margin-bottom: 18px;
+}
 
-    div[data-testid="stMetric"] label {
-        color: #000000 !important;
-        font-weight: 600;
-    }
 
-    div[data-testid="stMetricValue"] {
-        color: #000000 !important;
-        font-weight: 800;
-    }
+/* =====================================================
+   WHITE CARDS
+   ===================================================== */
 
-    div[data-testid="stMetricDelta"] {
-        color: #000000 !important;
-    }
+.card {
+    background-color: #FFFFFF !important;
+    background: #FFFFFF !important;
 
-    /* ---------- BUTTONS ---------- */
+    color: #000000 !important;
 
-    .stButton > button {
-        background: #2E7D4F !important;
-        color: #FFFFFF !important;
-        border: none !important;
-        border-radius: 10px;
-        font-weight: 700;
-        padding: 0.55rem 1.2rem;
-    }
+    border: 1px solid #C9E2CE !important;
+    border-radius: 18px !important;
 
-    .stButton > button p,
-    .stButton > button span {
-        color: #FFFFFF !important;
-    }
+    padding: 24px !important;
+    margin: 12px 0 !important;
 
-    .stButton > button:hover {
-        background: #245F3B !important;
-        color: #FFFFFF !important;
-    }
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.07) !important;
+}
 
-    /* ---------- INPUTS ---------- */
+.card h1,
+.card h2,
+.card h3,
+.card h4,
+.card h5,
+.card h6,
+.card p,
+.card span {
+    color: #000000 !important;
+    background-color: transparent !important;
+}
 
-    input,
-    textarea {
-        background: #FFFFFF !important;
-        color: #000000 !important;
-        border: 1px solid #B8DCC0 !important;
-    }
 
-    input::placeholder,
-    textarea::placeholder {
-        color: #555555 !important;
-    }
+/* =====================================================
+   NORMAL TITLES + DESCRIPTIONS
+   ===================================================== */
 
-    /* ---------- SELECTBOX ---------- */
+.stApp h1,
+.stApp h2,
+.stApp h3,
+.stApp h4,
+.stApp h5,
+.stApp h6,
+.stApp p,
+.stApp label {
+    color: #000000 !important;
+}
 
-    [data-baseweb="select"] {
-        background: #FFFFFF !important;
-        color: #000000 !important;
-    }
 
-    [data-baseweb="select"] * {
-        color: #000000 !important;
-    }
+/* =====================================================
+   SIDEBAR
+   ===================================================== */
 
-    [data-baseweb="select"] > div {
-        background: #FFFFFF !important;
-        color: #000000 !important;
-        border-color: #B8DCC0 !important;
-    }
+section[data-testid="stSidebar"] {
+    background-color: #D8F0DE !important;
+}
 
-    /* ---------- MULTISELECT ---------- */
+section[data-testid="stSidebar"] h1,
+section[data-testid="stSidebar"] h2,
+section[data-testid="stSidebar"] h3,
+section[data-testid="stSidebar"] h4,
+section[data-testid="stSidebar"] p,
+section[data-testid="stSidebar"] label,
+section[data-testid="stSidebar"] span {
+    color: #000000 !important;
+}
 
-    [data-baseweb="tag"] {
-        background: #D8F0DE !important;
-        color: #000000 !important;
-    }
 
-    [data-baseweb="tag"] span {
-        color: #000000 !important;
-    }
+/* =====================================================
+   DROPDOWN — SELECTED VALUE
+   ===================================================== */
 
-    /* ---------- NUMBER INPUT ---------- */
+div[data-baseweb="select"] {
+    background-color: #FFFFFF !important;
+}
 
-    div[data-testid="stNumberInput"] input {
-        background: #FFFFFF !important;
-        color: #000000 !important;
-    }
+div[data-baseweb="select"] > div {
+    background-color: #FFFFFF !important;
+    border: 1px solid #AFCDB6 !important;
+    color: #000000 !important;
+}
 
-    /* ---------- RADIO ---------- */
+div[data-baseweb="select"] input {
+    color: #000000 !important;
+}
 
-    div[data-testid="stRadio"] label {
-        color: #000000 !important;
-    }
+div[data-baseweb="select"] span {
+    color: #000000 !important;
+}
 
-    div[data-testid="stRadio"] label span {
-        color: #000000 !important;
-    }
+div[data-baseweb="select"] div {
+    color: #000000 !important;
+}
 
-    /* ---------- CHECKBOX ---------- */
 
-    div[data-testid="stCheckbox"] label {
-        color: #000000 !important;
-    }
+/* =====================================================
+   DROPDOWN — OPEN OPTIONS
+   ===================================================== */
 
-    /* ---------- TABS ---------- */
+div[role="listbox"] {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+}
 
-    button[data-baseweb="tab"] {
-        color: #000000 !important;
-        font-weight: 650;
-    }
+div[role="listbox"] div {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+}
 
-    button[data-baseweb="tab"] p,
-    button[data-baseweb="tab"] span {
-        color: #000000 !important;
-    }
+div[role="option"] {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+}
 
-    /* ---------- DATAFRAME ---------- */
+div[role="option"] span {
+    color: #000000 !important;
+}
 
-    div[data-testid="stDataFrame"] {
-        background: #FFFFFF !important;
-        border-radius: 14px;
-    }
+div[role="option"]:hover {
+    background-color: #EAF7EE !important;
+    color: #000000 !important;
+}
 
-    /* ---------- ALERTS ---------- */
 
-    .stAlert {
-        color: #000000 !important;
-        border-radius: 12px;
-    }
+/* =====================================================
+   INPUT BOXES
+   ===================================================== */
 
-    .stAlert p,
-    .stAlert span,
-    .stAlert div {
-        color: #000000 !important;
-    }
+input,
+textarea {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+    border: 1px solid #AFCDB6 !important;
+}
 
-    /* ---------- EXPANDERS ---------- */
+input::placeholder,
+textarea::placeholder {
+    color: #555555 !important;
+}
 
-    div[data-testid="stExpander"] {
-        background: #FFFFFF !important;
-        border: 1px solid #C9E2CE !important;
-        border-radius: 14px;
-    }
 
-    div[data-testid="stExpander"] * {
-        color: #000000 !important;
-    }
+/* =====================================================
+   NUMBER INPUT
+   ===================================================== */
 
-    /* ---------- SLIDER ---------- */
+div[data-testid="stNumberInput"] input {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+}
 
-    div[data-testid="stSlider"] label {
-        color: #000000 !important;
-    }
 
-    /* ---------- FILE UPLOADER ---------- */
+/* =====================================================
+   RADIO BUTTONS
+   ===================================================== */
 
-    div[data-testid="stFileUploader"] {
-        background: #FFFFFF !important;
-        border-radius: 14px;
-    }
+div[data-testid="stRadio"] label {
+    color: #000000 !important;
+}
 
-    div[data-testid="stFileUploader"] * {
-        color: #000000 !important;
-    }
+div[data-testid="stRadio"] span {
+    color: #000000 !important;
+}
 
-    /* ---------- FOOTER ---------- */
 
-    .footer {
-        text-align: center;
-        padding: 30px 10px 10px;
-        color: #000000 !important;
-        font-size: 0.9rem;
-    }
+/* =====================================================
+   CHECKBOX
+   ===================================================== */
 
-    .footer p,
-    .footer span,
-    .footer div,
-    .footer b {
-        color: #000000 !important;
-    }
+div[data-testid="stCheckbox"] label {
+    color: #000000 !important;
+}
+
+
+/* =====================================================
+   METRIC CARDS
+   ===================================================== */
+
+div[data-testid="stMetric"] {
+    background-color: #FFFFFF !important;
+
+    border: 1px solid #C9E2CE !important;
+    border-radius: 16px !important;
+
+    padding: 18px !important;
+
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.06) !important;
+}
+
+div[data-testid="stMetric"] label {
+    color: #000000 !important;
+}
+
+div[data-testid="stMetricValue"] {
+    color: #000000 !important;
+}
+
+div[data-testid="stMetricDelta"] {
+    color: #000000 !important;
+}
+
+
+/* =====================================================
+   BUTTONS
+   ===================================================== */
+
+.stButton > button {
+    background-color: #2E7D4F !important;
+    color: #FFFFFF !important;
+
+    border: none !important;
+    border-radius: 10px !important;
+
+    font-weight: 700 !important;
+}
+
+.stButton > button p,
+.stButton > button span {
+    color: #FFFFFF !important;
+}
+
+
+/* =====================================================
+   EXPANDERS
+   ===================================================== */
+
+div[data-testid="stExpander"] {
+    background-color: #FFFFFF !important;
+    border: 1px solid #C9E2CE !important;
+    border-radius: 14px !important;
+}
+
+div[data-testid="stExpander"] p,
+div[data-testid="stExpander"] span,
+div[data-testid="stExpander"] label {
+    color: #000000 !important;
+}
+
+
+/* =====================================================
+   DATAFRAME
+   ===================================================== */
+
+div[data-testid="stDataFrame"] {
+    background-color: #FFFFFF !important;
+    border-radius: 14px !important;
+}
+
+
+/* =====================================================
+   ALERTS
+   ===================================================== */
+
+.stAlert {
+    color: #000000 !important;
+}
+
+
+/* =====================================================
+   FOOTER
+   ===================================================== */
+
+.footer {
+    text-align: center;
+    padding: 30px 10px 10px;
+    color: #000000 !important;
+}
+
+.footer p,
+.footer span,
+.footer b {
+    color: #000000 !important;
+}
 
 </style>
 """, unsafe_allow_html=True)
