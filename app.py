@@ -20,8 +20,6 @@ st.set_page_config(
 # CLEAN UI THEME
 # ============================================================
 
-st.markdown(
-    """
 st.markdown("""
 <style>
 
